@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{F11CFC7D-E616-4A4E-A41E-D97C0A0504FE}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="Formulas\TxFormulas.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Admin\txAdmin.dproj">
+            <Dependencies>Formulas\TxFormulas.dproj</Dependencies>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="TxFormulas">
+        <MSBuild Projects="Formulas\TxFormulas.dproj"/>
+    </Target>
+    <Target Name="TxFormulas:Clean">
+        <MSBuild Projects="Formulas\TxFormulas.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="TxFormulas:Make">
+        <MSBuild Projects="Formulas\TxFormulas.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="txAdmin" DependsOnTargets="TxFormulas">
+        <MSBuild Projects="Admin\txAdmin.dproj"/>
+    </Target>
+    <Target Name="txAdmin:Clean" DependsOnTargets="TxFormulas:Clean">
+        <MSBuild Projects="Admin\txAdmin.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="txAdmin:Make" DependsOnTargets="TxFormulas:Make">
+        <MSBuild Projects="Admin\txAdmin.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="TxFormulas;txAdmin"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="TxFormulas:Clean;txAdmin:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="TxFormulas:Make;txAdmin:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
